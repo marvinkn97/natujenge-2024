@@ -3,7 +3,9 @@ package dev.marvin.group_5_mvc.controller;
 import dev.marvin.group_5_mvc.model.MathForm;
 import dev.marvin.group_5_mvc.service.MathService;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -40,20 +42,21 @@ public class MathController {
 
     @GetMapping("/indexJs")
     public String getIndexJSPage(){
-        return "indexJs";  // returns index page
+        return "indexJs";  // returns indexJs page
     }
 
-    @RequestMapping(value = "/add2", method = RequestMethod.POST)
+//    @RequestMapping(value = "/addJs", method = RequestMethod.POST)
+    @PostMapping("/addJs")
     public void add(@RequestBody MathForm mathForm, HttpServletResponse httpServletResponse){
         System.out.println(mathForm);
         var result = mathService.add(mathForm);
 
-        httpServletResponse.setContentType("text/html");
+        httpServletResponse.setContentType(MediaType.APPLICATION_JSON_VALUE);
         httpServletResponse.setStatus(HttpStatus.OK.value());
         try {
-            httpServletResponse.getWriter().println(result);
+            httpServletResponse.getWriter().println(result.intValue());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 
