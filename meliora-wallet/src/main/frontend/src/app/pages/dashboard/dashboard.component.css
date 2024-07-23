@@ -1,0 +1,43 @@
+body {
+    background-color: #f8f9fa; /* Light background similar to login page */
+  }
+  .dashboard-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #ffffff; /* White background */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  }
+  .balance-section {
+    background-color: #f0f0f0; /* Light gray background */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  .quick-actions {
+    margin-bottom: 20px;
+  }
+  .transaction-history {
+    background-color: #f0f0f0; /* Light gray background */
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  .wallet-details {
+    background-color: #f0f0f0; /* Light gray background */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+  }
+  .btn-primary, .btn-secondary, .btn-info, .btn-success {
+    background-color: #007bff; /* Primary color similar to login page */
+    border-color: #007bff; /* Border color similar to login page */
+  }
+  .btn-outline-secondary {
+    color: #007bff; /* Text color for secondary button */
+    border-color: #007bff; /* Border color for secondary button */
+  }
