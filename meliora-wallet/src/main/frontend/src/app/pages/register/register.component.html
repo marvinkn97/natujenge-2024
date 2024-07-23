@@ -1,55 +1,153 @@
 <div class="container">
   <div class="register-container">
     <img src="../../../assets/logo.jpg" alt="Bank Logo" />
-    <h2 class="display-4 fs-2">MELIORA WALLET</h2>
-    <form>
-        <div class="mb-3">
-            <input
-              type="text"
-              class="form-control"
-              id="username"
-              placeholder="Username"
-              required
-            />
+    <h2 class="display-4 fs-2 text-success">MELIORA WALLET</h2>
+    <form [formGroup]="registrationForm">
+      <div class="mb-3">
+        <input
+          type="text"
+          class="form-control"
+          id="username"
+          placeholder="Username"
+          formControlName="username"
+        />
+        <div
+          *ngIf="
+            registrationForm.get('username')?.invalid &&
+            registrationForm.get('username')?.touched
+          "
+        >
+          <div
+            class="text-danger"
+            *ngIf="registrationForm.get('username')?.hasError('required')"
+          >
+            Username is required.
           </div>
+        </div>
+      </div>
       <div class="mb-3">
         <input
           type="text"
           class="form-control"
           id="fullName"
+          formControlName="fullName"
           placeholder="Full Name"
           required
         />
+        <div
+        *ngIf="
+          registrationForm.get('fullName')?.invalid &&
+          registrationForm.get('fullName')?.touched
+        "
+      >
+        <div
+          class="text-danger"
+          *ngIf="registrationForm.get('fullName')?.hasError('required')"
+        >
+          Full Name is required.
+        </div>
+      </div>
       </div>
       <div class="mb-3">
         <input
           type="tel"
           class="form-control"
           id="phoneNumber"
+          formControlName="phoneNumber"
           placeholder="Phone Number"
           required
         />
+        <div
+          *ngIf="
+            registrationForm.get('phoneNumber')?.invalid &&
+            registrationForm.get('phoneNumber')?.touched
+          "
+        >
+          <div
+            class="text-danger"
+            *ngIf="registrationForm.get('phoneNumber')?.hasError('required')"
+          >
+            Phone Number is required.
+          </div>
+          <div
+            class="text-danger"
+            *ngIf="registrationForm.get('phoneNumber')?.hasError('pattern')"
+          >
+            Please enter a valid phone number starting with 254 and followed by
+            9 digits.
+          </div>
+        </div>
       </div>
-
       <div class="mb-3">
         <input
           type="password"
           class="form-control"
           id="password"
+          formControlName="password"
           placeholder="Password"
           required
         />
+        <div
+          *ngIf="
+            registrationForm.get('password')?.invalid &&
+            registrationForm.get('password')?.touched
+          "
+        >
+          <div
+            class="text-danger"
+            *ngIf="registrationForm.get('password')?.hasError('required')"
+          >
+            Password is required.
+          </div>
+          <div
+            class="text-danger"
+            *ngIf="registrationForm.get('password')?.hasError('minlength')"
+          >
+            Password must be at least 4 characters long.
+          </div>
+          <div
+            class="text-danger"
+            *ngIf="registrationForm.get('password')?.hasError('maxlength')"
+          >
+            Password cannot be more than 8 characters long.
+          </div>
+        </div>
       </div>
       <div class="mb-3">
         <input
           type="password"
           class="form-control"
           id="confirmPassword"
+          formControlName="confirmPassword"
           placeholder="Confirm Password"
           required
         />
+        <div
+          *ngIf="
+            registrationForm.get('confirmPassword')?.invalid &&
+            registrationForm.get('confirmPassword')?.touched
+          "
+        >
+          <div
+            class="text-danger"
+            *ngIf="
+              registrationForm.get('confirmPassword')?.hasError('required')
+            "
+          >
+            Confirm Password is required.
+          </div>
+          <div
+            class="text-danger"
+            *ngIf="
+              registrationForm.hasError('passwordMismatch') &&
+              registrationForm.get('confirmPassword')?.dirty
+            "
+          >
+            Passwords do not match.
+          </div>
+        </div>
       </div>
-      <button type="submit" class="btn btn-primary p-2 w-100">Register</button>
+      <button type="submit" class="btn btn-success p-2 w-100" [disabled]="!registrationForm.valid">Register</button>
     </form>
     <div class="login-link">
       <p>Already have an account? <a routerLink="login">Login here</a></p>
