@@ -1,8 +1,6 @@
 package dev.marvin.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,5 +28,11 @@ public class Wallet {
     @UpdateTimestamp
     private LocalDateTime updatedDate;
     private Boolean isDeleted;
+
+    @OneToMany
     private Set<Transaction> transactions;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }

@@ -2,6 +2,7 @@ package dev.marvin.seriviceImpl;
 
 import com.sun.jdi.request.DuplicateRequestException;
 import dev.marvin.dto.RegistrationRequest;
+import dev.marvin.model.User;
 import dev.marvin.model.Wallet;
 import dev.marvin.repository.WalletRepository;
 import dev.marvin.service.UserService;
@@ -27,16 +28,13 @@ public class WalletServiceImpl implements WalletService {
         
         try{
 
-            boolean result = userService.create(registrationRequest.getUsername(), registrationRequest.getPassword());
-
-            if(!result){
-                throw new RuntimeException("Unable to process request");
-            }
+            User user = userService.create(registrationRequest.getUsername(), registrationRequest.getPassword());
 
             Wallet wallet = Wallet.builder()
                     .phoneNumber(registrationRequest.getPhoneNumber())
                     .fullName(registrationRequest.getFullName())
                     .balance(BigDecimal.ZERO)
+                    .user(user)
                     .build();
 
             walletRepository.save(wallet);

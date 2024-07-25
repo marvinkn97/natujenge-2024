@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,6 +7,8 @@ import {
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { RegistrationRequest } from 'src/app/model/registration.request';
+import { WalletService } from 'src/app/services/wallet.service';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +18,8 @@ import {
 export class RegisterComponent {
   registrationForm!: FormGroup;
 
+  private walletService: WalletService = inject(WalletService);
+
   ngOnInit() {
     this.initializeForm();
   }
@@ -23,8 +27,8 @@ export class RegisterComponent {
   initializeForm(): void {
     this.registrationForm = new FormGroup(
       {
-        username: new FormControl('', Validators.required),
-        fullName: new FormControl('', Validators.required),
+        username: new FormControl('', [Validators.required]),
+        fullName: new FormControl('', [Validators.required]),
         phoneNumber: new FormControl('', [
           Validators.required,
           Validators.pattern('^254[0-9]{9}$'),
@@ -60,4 +64,22 @@ export class RegisterComponent {
       return null;
     }
   };
+
+  onSubmit() {
+    const registrationRequest: RegistrationRequest = {
+      username: this.registrationForm.value.username as string,
+      fullName: this.registrationForm.value.fullName as string,
+      phoneNumber: this.registrationForm.value.phoneNumber as string,
+      password: this.registrationForm.value.password as string,
+    };
+
+    console.log(registrationRequest);
+    this.walletService.register(registrationRequest).subscribe({
+      next: (response) => {
+        console.log(response);
+      },
+      error: (error) => console.log(error),
+      complete: () => console.log('complete'),
+    });
+  }
 }

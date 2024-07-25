@@ -1,6 +1,7 @@
 package dev.marvin.seriviceImpl;
 
 import com.sun.jdi.request.DuplicateRequestException;
+import dev.marvin.model.Role;
 import dev.marvin.model.User;
 import dev.marvin.repository.UserRepository;
 import dev.marvin.service.UserService;
@@ -27,16 +28,17 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public boolean create(String username, String password) {
+    public User create(String username, String password) {
         log.info("Inside create method of UserServiceImpl");
 
         try {
             User user = User.builder()
                     .username(username)
                     .password(passwordEncoder.encode(password))
+                    .role(Role.OWNER)
                     .build();
 
-            return userRepository.save(user).getId() > 0;
+            return userRepository.save(user);
 
         } catch (DataIntegrityViolationException e) {
             log.info("DataIntegrityViolationException: {}", e.getMessage(), e);
