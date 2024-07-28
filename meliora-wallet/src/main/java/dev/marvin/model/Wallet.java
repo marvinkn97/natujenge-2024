@@ -22,16 +22,14 @@ public class Wallet {
     @Id
     private String phoneNumber;
     private String fullName;
-    private BigDecimal balance = BigDecimal.ZERO;
+    private BigDecimal balance;
     @CreationTimestamp
     private LocalDateTime createdDate;
     @UpdateTimestamp
     private LocalDateTime updatedDate;
     private Boolean isDeleted;
-
     @OneToMany
     private Set<Transaction> transactions;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

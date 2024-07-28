@@ -1,6 +1,6 @@
 package dev.marvin.seriviceImpl;
 
-import com.sun.jdi.request.DuplicateRequestException;
+import dev.marvin.exception.DuplicateResourceException;
 import dev.marvin.model.Role;
 import dev.marvin.model.User;
 import dev.marvin.repository.UserRepository;
@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -28,27 +29,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    @Transactional
     public User create(String username, String password) {
         log.info("Inside create method of UserServiceImpl");
-
         try {
             User user = User.builder()
                     .username(username)
                     .password(passwordEncoder.encode(password))
                     .role(Role.OWNER)
+                    .isDeleted(false)
                     .build();
-
             return userRepository.save(user);
-
         } catch (DataIntegrityViolationException e) {
-            log.info("DataIntegrityViolationException: {}", e.getMessage(), e);
-            throw new DuplicateRequestException("Username already taken");
-
-        } catch (Exception e) {
-            log.info("Error occurred in create method of UserServiceImpl: {}", e.getMessage(), e);
-            throw new RuntimeException("Failed to process request");
+            throw new DuplicateResourceException("username [%s] already taken".formatted(username));
         }
-
     }
 
 }

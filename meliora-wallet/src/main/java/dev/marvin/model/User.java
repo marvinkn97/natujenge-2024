@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private String username;
     private String password;
     private Role role;
-
+    private Boolean isDeleted;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));

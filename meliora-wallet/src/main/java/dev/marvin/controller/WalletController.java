@@ -10,10 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/wallet")
+@RequestMapping("/api/v1/wallets")
 @Slf4j
 @RequiredArgsConstructor
-@CrossOrigin("*")
 public class WalletController {
     private final WalletService walletService;
 

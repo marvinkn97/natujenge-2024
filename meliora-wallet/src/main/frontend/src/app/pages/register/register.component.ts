@@ -1,3 +1,4 @@
+import { ApiService } from './../../services/api.service';
 import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
@@ -9,6 +10,8 @@ import {
 } from '@angular/forms';
 import { RegistrationRequest } from 'src/app/model/registration.request';
 import { WalletService } from 'src/app/services/wallet.service';
+import { environment } from 'src/environments/environment.development';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-register',
@@ -19,6 +22,7 @@ export class RegisterComponent {
   registrationForm!: FormGroup;
 
   private walletService: WalletService = inject(WalletService);
+  private apiService: ApiService = inject(ApiService);
 
   ngOnInit() {
     this.initializeForm();
@@ -73,13 +77,29 @@ export class RegisterComponent {
       password: this.registrationForm.value.password as string,
     };
 
-    console.log(registrationRequest);
-    this.walletService.register(registrationRequest).subscribe({
-      next: (response) => {
-        console.log(response);
-      },
-      error: (error) => console.log(error),
-      complete: () => console.log('complete'),
+    this.apiService
+      .postData(environment.WALLET_URL, registrationRequest)
+      .subscribe({
+        next: (response: any) => this.showSuccessMessage(response.payload),
+        error: (error) =>
+          this.showErrorMessage(error.error.status, error.error.payload),
+        complete: () => console.log('complete'),
+      });
+  }
+
+  showSuccessMessage(message: string) {
+    Swal.fire({
+      title: 'Sucess!',
+      text: message,
+      icon: 'success',
+    });
+  }
+
+  showErrorMessage(status: string, message: string) {
+    Swal.fire({
+      title: status.toUpperCase() || 'Error!',
+      text: message || 'An unexpected error occurred',
+      icon: 'error',
     });
   }
 }
