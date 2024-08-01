@@ -8,7 +8,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { WalletService } from './services/wallet.service';
+import { InputValidationService } from './services/validator.service';
+import { ApiService } from './services/api.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,7 @@ import { WalletService } from './services/wallet.service';
     ReactiveFormsModule,
     HttpClientModule,
   ],
-  providers: [WalletService],
+  providers: [InputValidationService, ApiService, AuthService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

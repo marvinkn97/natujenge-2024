@@ -2,14 +2,14 @@ import { ApiService } from './../../services/api.service';
 import { Component, inject } from '@angular/core';
 import {
   AbstractControl,
-  FormBuilder,
   FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
 } from '@angular/forms';
+import { Router } from '@angular/router';
 import { RegistrationRequest } from 'src/app/model/registration.request';
-import { WalletService } from 'src/app/services/wallet.service';
+import { InputValidationService } from 'src/app/services/validator.service';
 import { environment } from 'src/environments/environment.development';
 import Swal from 'sweetalert2';
 
@@ -21,8 +21,9 @@ import Swal from 'sweetalert2';
 export class RegisterComponent {
   registrationForm!: FormGroup;
 
-  private walletService: WalletService = inject(WalletService);
   private apiService: ApiService = inject(ApiService);
+  validator: InputValidationService = inject(InputValidationService);
+  private router: Router = inject(Router);
 
   ngOnInit() {
     this.initializeForm();
@@ -45,7 +46,7 @@ export class RegisterComponent {
         confirmPassword: new FormControl('', Validators.required),
       },
       {
-        validators: this.passwordMatchValidator, // Custom validator function
+        validators: this.passwordMatchValidator,
       }
     );
   }
@@ -77,19 +78,23 @@ export class RegisterComponent {
       password: this.registrationForm.value.password as string,
     };
 
+    console.log(registrationRequest);
+
     this.apiService
       .postData(environment.WALLET_URL, registrationRequest)
       .subscribe({
         next: (response: any) => this.showSuccessMessage(response.payload),
         error: (error) =>
           this.showErrorMessage(error.error.status, error.error.payload),
-        complete: () => console.log('complete'),
+        complete: () => {
+          this.router.navigateByUrl('/dashboard');
+        },
       });
   }
 
   showSuccessMessage(message: string) {
     Swal.fire({
-      title: 'Sucess!',
+      title: 'Success!',
       text: message,
       icon: 'success',
     });
@@ -97,7 +102,7 @@ export class RegisterComponent {
 
   showErrorMessage(status: string, message: string) {
     Swal.fire({
-      title: status.toUpperCase() || 'Error!',
+      title: status || 'Error!',
       text: message || 'An unexpected error occurred',
       icon: 'error',
     });

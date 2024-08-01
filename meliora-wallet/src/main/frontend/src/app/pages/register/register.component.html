@@ -10,6 +10,7 @@
           id="username"
           placeholder="Username"
           formControlName="username"
+          (keypress)="validator.isMaliciousChar($event)"
         />
         <div
           *ngIf="
@@ -32,7 +33,7 @@
           id="fullName"
           formControlName="fullName"
           placeholder="Full Name"
-          required
+          (keypress)="validator.isMaliciousChar($event)"
         />
         <div
           *ngIf="
@@ -55,7 +56,7 @@
           id="phoneNumber"
           formControlName="phoneNumber"
           placeholder="Phone Number"
-          required
+          (keypress)="validator.isMaliciousChar($event)"
         />
         <div
           *ngIf="
@@ -85,7 +86,6 @@
           id="password"
           formControlName="password"
           placeholder="Password"
-          required
         />
         <div
           *ngIf="
@@ -120,7 +120,6 @@
           id="confirmPassword"
           formControlName="confirmPassword"
           placeholder="Confirm Password"
-          required
         />
         <div
           *ngIf="
