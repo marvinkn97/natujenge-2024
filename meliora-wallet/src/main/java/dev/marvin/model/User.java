@@ -23,10 +23,16 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Column(unique = true)
+
     private String username;
+
     private String password;
+
+    @Enumerated(EnumType.STRING)
     private Role role;
+
     private Boolean isDeleted;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));

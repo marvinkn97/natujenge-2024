@@ -15,4 +15,8 @@ spring:
       hibernate:
         format_sql: true
 
+tiara:
+  endpoint: https://api2.tiaraconnect.io/api/messaging/sendsms
+  apiKey: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIzMzgiLCJvaWQiOjMzOCwidWlkIjoiMGJmMTc3NTItZDNlMC00MTk4LThkODQtODFiOTU4YzFhOWYxIiwiYXBpZCI6Mjk0LCJpYXQiOjE3MTY1NDE1NDcsImV4cCI6MjA1NjU0MTU0N30.xmOJus2msTeRal-NK9fWSFehrEngJxmMcgfk6X5y2Ib61NUehzo4Y_fT4-Y9dO-IMIPODAsD3t7ts2KyVRY4cQ
+
 

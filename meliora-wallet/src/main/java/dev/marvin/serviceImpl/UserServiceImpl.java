@@ -1,4 +1,4 @@
-package dev.marvin.seriviceImpl;
+package dev.marvin.serviceImpl;
 
 import dev.marvin.exception.DuplicateResourceException;
 import dev.marvin.model.Role;

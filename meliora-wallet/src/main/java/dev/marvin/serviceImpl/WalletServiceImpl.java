@@ -1,10 +1,12 @@
-package dev.marvin.seriviceImpl;
+package dev.marvin.serviceImpl;
 
 import dev.marvin.dto.RegistrationRequest;
+import dev.marvin.dto.SMSRequest;
 import dev.marvin.exception.DuplicateResourceException;
 import dev.marvin.model.User;
 import dev.marvin.model.Wallet;
 import dev.marvin.repository.WalletRepository;
+import dev.marvin.service.SmsService;
 import dev.marvin.service.UserService;
 import dev.marvin.service.WalletService;
 import lombok.AllArgsConstructor;
@@ -22,6 +24,7 @@ public class WalletServiceImpl implements WalletService {
 
     private final WalletRepository walletRepository;
     private final UserService userService;
+    private final SmsService smsService;
 
     @Override
     @Transactional
@@ -36,7 +39,22 @@ public class WalletServiceImpl implements WalletService {
                     .isDeleted(false)
                     .user(user)
                     .build();
-            walletRepository.save(wallet);
+
+            Wallet savedWallet = walletRepository.save(wallet);
+
+            String welcomeMessage = """
+                    Welcome %s to Meliora Wallet. Your account is now set up and ready to use.
+                    Thank you for choosing us!
+                    ~ Meliora Wallet Team
+                    """.formatted(savedWallet.getFullName());
+
+            SMSRequest smsRequest = SMSRequest.builder()
+                    .message(welcomeMessage)
+                    .to(savedWallet.getPhoneNumber())
+                    .build();
+
+            smsService.sendSMS(smsRequest).block();
+
             return "Wallet Created Successfully";
         } catch (DataIntegrityViolationException e) {
             throw new DuplicateResourceException("phone number [%s] already taken".formatted(registrationRequest.getPhoneNumber()));
