@@ -10,7 +10,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "tbl_wallets")
@@ -44,8 +43,6 @@ public class Wallet {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-    @OneToMany
-    private Set<Transaction> transactions;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -2,13 +2,17 @@ package dev.marvin.serviceImpl;
 
 import dev.marvin.dto.RegistrationRequest;
 import dev.marvin.dto.SMSRequest;
+import dev.marvin.dto.WalletResponse;
 import dev.marvin.exception.DuplicateResourceException;
+import dev.marvin.exception.ResourceNotFoundException;
 import dev.marvin.model.User;
 import dev.marvin.model.Wallet;
 import dev.marvin.repository.WalletRepository;
 import dev.marvin.service.SmsService;
 import dev.marvin.service.UserService;
 import dev.marvin.service.WalletService;
+import dev.marvin.util.Mapper;
+import dev.marvin.util.MessageConstants;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -55,9 +59,16 @@ public class WalletServiceImpl implements WalletService {
 
             smsService.sendSMSWithWebClient(smsRequest).block();
 
-            return "Wallet Created Successfully";
+            return MessageConstants.WALLET_CREATED.getMessage();
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateResourceException("phone number [%s] already taken".formatted(registrationRequest.getPhoneNumber()));
+            throw new DuplicateResourceException(MessageConstants.DUPLICATE_PHONE_NUMBER.getMessage().formatted(registrationRequest.getPhoneNumber()));
         }
+    }
+
+    @Override
+    public WalletResponse get(Integer userId) {
+        return walletRepository.findByUserId(userId)
+                .map(Mapper::mapToWalletResponse)
+                .orElseThrow(() -> new ResourceNotFoundException(MessageConstants.WALLET_NOT_FOUND.getMessage()));
     }
 }

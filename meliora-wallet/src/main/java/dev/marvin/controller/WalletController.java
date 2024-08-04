@@ -3,6 +3,7 @@ package dev.marvin.controller;
 import dev.marvin.dto.RegistrationRequest;
 import dev.marvin.dto.ResponseDto;
 import dev.marvin.service.WalletService;
+import dev.marvin.util.ResponseBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -17,14 +18,16 @@ public class WalletController {
     private final WalletService walletService;
 
     @PostMapping
-    public ResponseEntity<ResponseDto<Object>> create(@RequestBody RegistrationRequest registrationRequest){
+    public ResponseEntity<ResponseDto<Object>> create(@RequestBody RegistrationRequest registrationRequest) {
         log.info("Inside create method of WalletController");
-        System.out.println(registrationRequest);
-        ResponseDto<Object> responseDto = ResponseDto.builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .status(HttpStatus.CREATED.getReasonPhrase())
-                .payload(walletService.create(registrationRequest))
-                .build();
+        ResponseDto<Object> responseDto = ResponseBuilder.buildResponse(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), walletService.create(registrationRequest));
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @GetMapping
+    public ResponseEntity<ResponseDto<Object>> get(@RequestParam("userId") Integer userId) {
+        log.info("Inside get method of WalletController");
+        ResponseDto<Object> responseDto = ResponseBuilder.buildResponse(HttpStatus.OK.value(), HttpStatus.OK.getReasonPhrase(), walletService.get(userId));
         return ResponseEntity.ok(responseDto);
     }
 }
