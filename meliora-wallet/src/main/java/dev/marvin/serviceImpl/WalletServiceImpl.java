@@ -53,7 +53,7 @@ public class WalletServiceImpl implements WalletService {
                     .to(savedWallet.getPhoneNumber())
                     .build();
 
-            smsService.sendSMS(smsRequest).block();
+            smsService.sendSMSWithWebClient(smsRequest).block();
 
             return "Wallet Created Successfully";
         } catch (DataIntegrityViolationException e) {

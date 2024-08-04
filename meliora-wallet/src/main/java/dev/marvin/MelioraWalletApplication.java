@@ -3,11 +3,9 @@ package dev.marvin;
 import dev.marvin.dto.SMSRequest;
 import dev.marvin.dto.SMSResponse;
 import dev.marvin.service.SmsService;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
@@ -27,7 +25,7 @@ public class MelioraWalletApplication {
                     .message("Testing Meliora Wallet")
                     .build();
 
-            Mono<SMSResponse> smsResponseMono = service.sendSMS(smsRequest);
+            Mono<SMSResponse> smsResponseMono = service.sendSMSWithWebClient(smsRequest);
             System.out.println(smsResponseMono.block());
 
         };
