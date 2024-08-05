@@ -61,8 +61,12 @@ public class WalletServiceImpl implements WalletService {
 
             return MessageConstants.WALLET_CREATED.getMessage();
         } catch (DataIntegrityViolationException e) {
-            throw new DuplicateResourceException(MessageConstants.DUPLICATE_PHONE_NUMBER.getMessage().formatted(registrationRequest.getPhoneNumber()));
+            if (e.getMessage().contains("phone_number")) {
+                throw new DuplicateResourceException(MessageConstants.DUPLICATE_PHONE_NUMBER.getMessage().formatted(registrationRequest.getPhoneNumber()));
+            }
+            throw new RuntimeException(e);
         }
+
     }
 
     @Override

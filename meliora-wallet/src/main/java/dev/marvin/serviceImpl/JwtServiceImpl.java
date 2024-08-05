@@ -43,7 +43,7 @@ public class JwtServiceImpl implements JwtService {
                     .signWith(key)
                     .compact();
         } catch (Exception e) {
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
