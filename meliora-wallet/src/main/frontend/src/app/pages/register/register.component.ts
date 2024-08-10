@@ -8,6 +8,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 import { RegistrationRequest } from 'src/app/model/registration.request';
 import { InputValidationService } from 'src/app/services/validator.service';
 import { environment } from 'src/environments/environment.development';
@@ -24,6 +25,7 @@ export class RegisterComponent {
   private apiService: ApiService = inject(ApiService);
   validator: InputValidationService = inject(InputValidationService);
   private router: Router = inject(Router);
+  private subscriptions: Subscription = new Subscription();
 
   ngOnInit() {
     this.initializeForm();
@@ -77,19 +79,16 @@ export class RegisterComponent {
       phoneNumber: this.registrationForm.value.phoneNumber as string,
       password: this.registrationForm.value.password as string,
     };
-
-    console.log(registrationRequest);
-
-    this.apiService
+    this.subscriptions.add(this.apiService
       .postData(environment.WALLET_URL, registrationRequest)
       .subscribe({
         next: (response: any) => this.showSuccessMessage(response.payload),
         error: (error) =>
           this.showErrorMessage(error.error.status, error.error.payload),
         complete: () => {
-          this.router.navigateByUrl('/dashboard');
+          this.router.navigateByUrl('/login');
         },
-      });
+      }));
   }
 
   showSuccessMessage(message: string) {
@@ -107,4 +106,9 @@ export class RegisterComponent {
       icon: 'error',
     });
   }
+
+  ngOnDestroy(){
+    this.subscriptions.unsubscribe();
+  }
 }
+

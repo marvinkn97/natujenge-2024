@@ -2,13 +2,15 @@
   <div class="login-container">
     <img src="../../../assets/logo.jpg" alt="Bank Logo" />
     <h2 class="display-4 fs-2 text-success">MELIORA WALLET</h2>
-    <form>
+    <form [formGroup]="loginForm" autocomplete="off">
       <div class="mb-3">
         <input
           type="text"
           class="form-control"
           id="username"
           placeholder="Username"
+          formControlName="username"
+          autofocus
           (keypress)="validator.isMaliciousChar($event)"
         />
       </div>
@@ -18,9 +20,17 @@
           class="form-control"
           id="password"
           placeholder="Password"
+          formControlName="password"
         />
       </div>
-      <button type="submit" class="btn btn-success p-2 w-100">Login</button>
+      <button
+        type="submit"
+        class="btn btn-success p-2 w-100"
+        [disabled]="!loginForm.valid"
+        (click)="onSubmit()"
+      >
+        Login
+      </button>
     </form>
     <div class="register-link">
       <p>

@@ -43,7 +43,6 @@ public class Wallet {
     @Column(name = "is_deleted")
     private Boolean isDeleted;
 
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

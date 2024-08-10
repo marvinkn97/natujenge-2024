@@ -20,7 +20,8 @@ public class WalletController {
     @PostMapping
     public ResponseEntity<ResponseDto<Object>> create(@RequestBody RegistrationRequest registrationRequest) {
         log.info("Inside create method of WalletController");
-        ResponseDto<Object> responseDto = ResponseBuilder.buildResponse(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), walletService.create(registrationRequest));
+        walletService.create(registrationRequest);
+        ResponseDto<Object> responseDto = ResponseBuilder.buildResponse(HttpStatus.CREATED.value(), HttpStatus.CREATED.getReasonPhrase(), "Wallet Created Successfully");
         return ResponseEntity.ok(responseDto);
     }
 

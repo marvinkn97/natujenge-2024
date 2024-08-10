@@ -42,6 +42,8 @@ public class JwtServiceImpl implements JwtService {
                     .issuedAt(now)
                     .signWith(key)
                     .compact();
+        } catch (RequestValidationException e) {
+            throw new RequestValidationException(e.getMessage());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

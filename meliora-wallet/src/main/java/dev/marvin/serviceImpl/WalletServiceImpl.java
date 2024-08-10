@@ -11,6 +11,7 @@ import dev.marvin.repository.WalletRepository;
 import dev.marvin.service.SmsService;
 import dev.marvin.service.UserService;
 import dev.marvin.service.WalletService;
+import dev.marvin.util.ErrorMessages;
 import dev.marvin.util.Mapper;
 import dev.marvin.util.MessageConstants;
 import lombok.AllArgsConstructor;
@@ -29,10 +30,11 @@ public class WalletServiceImpl implements WalletService {
     private final WalletRepository walletRepository;
     private final UserService userService;
     private final SmsService smsService;
+    private final ErrorMessages errorMessages;
 
     @Override
     @Transactional
-    public String create(RegistrationRequest registrationRequest) {
+    public void create(RegistrationRequest registrationRequest) {
         log.info("Inside create method of WalletServiceImpl");
         try {
             User user = userService.create(registrationRequest.getUsername(), registrationRequest.getPassword());
@@ -58,11 +60,9 @@ public class WalletServiceImpl implements WalletService {
                     .build();
 
             smsService.sendSMSWithWebClient(smsRequest).block();
-
-            return MessageConstants.WALLET_CREATED.getMessage();
         } catch (DataIntegrityViolationException e) {
             if (e.getMessage().contains("phone_number")) {
-                throw new DuplicateResourceException(MessageConstants.DUPLICATE_PHONE_NUMBER.getMessage().formatted(registrationRequest.getPhoneNumber()));
+                throw new DuplicateResourceException(errorMessages.getDuplicatePhone().formatted(registrationRequest.getPhoneNumber()));
             }
             throw new RuntimeException(e);
         }
